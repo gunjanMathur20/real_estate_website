@@ -1,155 +1,9 @@
-// import React, { useState } from "react";
-// import { Link } from "react-router-dom";
-// import { CiUser, CiSearch } from "react-icons/ci";
-// import { HiMenu, HiX } from "react-icons/hi";
-// import { AnimatePresence } from "framer-motion";
 
-// import Login from "../pages/Login";
-// import Register from "../pages/Register";
-
-// export default function Navbar() {
-//   const [open, setOpen] = useState(false);
-//   const [loginOpen, setLoginOpen] = useState(false);
-//   const [registerOpen, setRegisterOpen] = useState(false);
-
-//   return (
-//     <header className="w-full bg-black/85 backdrop-blur-xl text-white py-7 sticky top-0 left-0 z-50">
-//       <div className="container mx-auto px-4 flex items-center justify-between md:px-6 lg:px-10">
-//         {/* MOBILE LEFT MENU BUTTON */}
-//         <div className="flex items-center gap-4 md:hidden">
-//           <button className="text-2xl" onClick={() => setOpen(!open)}>
-//             {open ? <HiX /> : <HiMenu />}
-//           </button>
-//         </div>
-
-//         {/* DESKTOP  LOGO */}
-//         <div className="flex items-center gap-2 text-3xl font-semibold">
-//           <span className="text-blue-500">Urban</span>
-//           <span className="text-white">Nest</span>
-//         </div>
-
-//         {/* DESKTOP NAV LINKS */}
-//         <nav className="hidden md:flex items-center gap-10 font-semibold lg:flex">
-//           <Link to="/" className="hover:text-gray-300">
-//             HOME
-//           </Link>
-//           <Link to="/about" className="hover:text-gray-300">
-//             ABOUT
-//           </Link>
-//           <Link to="/projects" className="hover:text-gray-300">
-//             PROJECTS
-//           </Link>
-//           <Link to="/testimonials" className="hover:text-gray-300">
-//             TESTIMONIALS
-//           </Link>
-//           <Link to="/contact" className="hover:text-gray-300">
-//             CONTACT US
-//           </Link>
-//         </nav>
-
-//         {/* DESKTOP RIGHT ICONS */}
-//         <div className="hidden md:flex items-center gap-6 text-xl lg:flex">
-//           {/* SEARCH ICON */}
-//           <button >
-//             <CiSearch className="hover:text-gray-300 cursor-pointer" />
-//           </button>
-
-//           {/* LOGIN */}
-//           <button onClick={() => setLoginOpen(true)}>
-//             <CiUser className="hover:text-gray-300 cursor-pointer" />
-//           </button>
-//         </div>
-//       </div>
-
-//       {/* MOBILE MENU DROPDOWN */}
-//       {open && (
-//         <div className="md:hidden lg:hidden bg-[#2f2f2f] mt-4 pb-4">
-//           <nav className="flex flex-col gap-4 px-6 text-sm font-semibold">
-//             <Link
-//               onClick={() => setOpen(false)}
-//               to="/"
-//               className="hover:text-gray-300"
-//             >
-//               HOME
-//             </Link>
-
-//             <Link
-//               onClick={() => setOpen(false)}
-//               to="/about"
-//               className="hover:text-gray-300"
-//             >
-//               ABOUT
-//             </Link>
-
-//             <Link
-//               onClick={() => setOpen(false)}
-//               to="/projects"
-//               className="hover:text-gray-300"
-//             >
-//               PROJECTS
-//             </Link>
-
-//             <Link
-//               onClick={() => setOpen(false)}
-//               to="/testimonials"
-//               className="hover:text-gray-300"
-//             >
-//               TESTIMONIALS
-//             </Link>
-
-//             <Link
-//               onClick={() => setOpen(false)}
-//               to="/contact"
-//               className="hover:text-gray-300"
-//             >
-//               CONTACT US
-//             </Link>
-
-//             {/* MOBILE ICONS */}
-//             <div className="flex items-center gap-6 pt-2 text-lg pe-3 ps-3">
-//               <Link to="/search">
-//                 <CiSearch className="hover:text-gray-300" />
-//               </Link>
-
-//               <button onClick={() => setLoginOpen(true)}>
-//                 <CiUser className="hover:text-gray-300" />
-//               </button>
-//             </div>
-//           </nav>
-//         </div>
-//       )}
-
-//       {/* LOGIN & REGISTER SLIDE PANELS */}
-//       <AnimatePresence>
-//         {loginOpen && (
-//           <Login
-//             onClose={() => setLoginOpen(false)}
-//             onRegisterOpen={() => {
-//               setLoginOpen(false);
-//               setRegisterOpen(true);
-//             }}
-//           />
-//         )}
-
-//         {registerOpen && (
-//           <Register
-//             onClose={() => setRegisterOpen(false)}
-//             onLoginOpen={() => {
-//               setRegisterOpen(false);
-//               setLoginOpen(true);
-//             }}
-//           />
-//         )}
-//       </AnimatePresence>
-//     </header>
-//   );
-// }
-
-import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { Link, useLocation } from "react-router-dom";
 import { CiUser, CiSearch } from "react-icons/ci";
 import { HiMenu, HiX } from "react-icons/hi";
-import { AnimatePresence } from "framer-motion";
+import { AnimatePresence, motion } from "framer-motion";
 
 import Login from "../pages/Login";
 import Register from "../pages/Register";
@@ -158,125 +12,678 @@ export default function Navbar() {
   const [open, setOpen] = useState(false);
   const [loginOpen, setLoginOpen] = useState(false);
   const [registerOpen, setRegisterOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
+
+  const location = useLocation();
 
   const loggedIn = localStorage.getItem("loggedIn") === "true";
-  //
+
+  // ================= SCROLL EFFECT =================
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setScrolled(window.scrollY > 40);
+    };
+
+    handleScroll();
+
+    window.addEventListener("scroll", handleScroll);
+
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+    };
+  }, []);
+
+  // Close mobile menu when route changes
+  useEffect(() => {
+    setOpen(false);
+  }, [location.pathname]);
+
+  // ================= NAV LINKS =================
+
+  const navLinks = [
+    {
+      name: "HOME",
+      path: "/",
+    },
+    {
+      name: "ABOUT",
+      path: "/about",
+    },
+    {
+      name: "PROJECTS",
+      path: "/projects",
+    },
+    {
+      name: "TESTIMONIALS",
+      path: "/testimonials",
+    },
+    {
+      name: "CONTACT",
+      path: "/contact",
+    },
+  ];
+
+  const closeMenu = () => {
+    setOpen(false);
+  };
 
   return (
-    <header className="w-full bg-black/85 backdrop-blur-xl text-white py-7 sticky  top-0 left-0 z-40">
-      <div className="container mx-auto px-4 flex items-center justify-between md:px-6 lg:px-10">
-        <div className="flex items-center gap-4 md:hidden">
-          <button className="text-2xl" onClick={() => setOpen(!open)}>
-            {open ? <HiX /> : <HiMenu />}
-          </button>
-        </div>
+    <>
+      {/* =====================================================
+          NAVBAR
+      ===================================================== */}
 
-        <div className="flex items-center gap-2 text-3xl font-semibold">
-          <span className="text-blue-500">Urban</span>
-          <span className="text-white">Nest</span>
-        </div>
-        
-        <nav className="hidden md:flex items-center gap-10 font-semibold lg:flex">
-          <Link to="/" className="hover:text-gray-300">
-            HOME
-          </Link>
-          <Link to="/about" className="hover:text-gray-300">
-            ABOUT
-          </Link>
-          <Link to="/projects" className="hover:text-gray-300">
-            PROJECTS
-          </Link>
-          <Link to="/testimonials" className="hover:text-gray-300">
-            TESTIMONIALS
-          </Link>
-          <Link to="/contact" className="hover:text-gray-300">
-            CONTACT US
-          </Link>
-        </nav>
+      <motion.header
+        initial={{
+          y: -80,
+          opacity: 0,
+        }}
+        animate={{
+          y: 0,
+          opacity: 1,
+        }}
+        transition={{
+          duration: 0.7,
+          ease: "easeOut",
+        }}
+        className="fixed left-0 top-0 z-50 w-full"
+      >
+        <motion.div
+          animate={{
+            paddingTop: scrolled ? 10 : 18,
+            paddingLeft: scrolled ? 16 : 20,
+            paddingRight: scrolled ? 16 : 20,
+          }}
+          transition={{
+            duration: 0.35,
+          }}
+          className="mx-auto w-full"
+        >
+          {/* ================= NAVBAR CONTAINER ================= */}
 
-        <div className="hidden md:flex items-center gap-6 text-xl lg:flex">
-          <button>
-            <CiSearch className="hover:text-gray-300 cursor-pointer" />
-          </button>
+          <motion.div
+            animate={{
+              borderRadius: scrolled ? 16 : 22,
+            }}
+            transition={{
+              duration: 0.35,
+            }}
+            className={`
+              mx-auto
+              flex
+              max-w-7xl
+              items-center
+              justify-between
+              border
+              px-5
+              py-3
+              transition-colors
+              duration-500
+              sm:px-6
 
-          {!loggedIn ? (
-            <button onClick={() => setLoginOpen(true)}>
-              <CiUser className="hover:text-gray-300 cursor-pointer" />
-            </button>
-          ) : (
-            <button
-              className="cursor-pointer"
-              onClick={() => {
-                localStorage.removeItem("loggedIn");
-                window.location.reload();
-              }}
-            >
-              Logout
-            </button>
-          )}
-        </div>
-      </div>
+              ${
+                scrolled
+                  ? "border-white/10 bg-[#111827]/95 shadow-2xl"
+                  : "border-white/15 bg-black/20"
+              }
+            `}
+          >
+            {/* =================================================
+                LOGO
+            ================================================= */}
 
-      {open && (
-        <div className="md:hidden lg:hidden bg-[#2f2f2f] mt-4 pb-4">
-          <nav className="flex flex-col gap-4 px-6 text-sm font-semibold">
             <Link
-              onClick={() => setOpen(false)}
               to="/"
-              className="hover:text-gray-300"
+              onClick={closeMenu}
+              className="group flex items-center gap-2"
             >
-              HOME
-            </Link>
-            <Link
-              onClick={() => setOpen(false)}
-              to="/about"
-              className="hover:text-gray-300"
-            >
-              ABOUT
-            </Link>
-            <Link
-              onClick={() => setOpen(false)}
-              to="/projects"
-              className="hover:text-gray-300"
-            >
-              PROJECTS
-            </Link>
-            <Link
-              onClick={() => setOpen(false)}
-              to="/testimonials"
-              className="hover:text-gray-300"
-            >
-              TESTIMONIALS
-            </Link>
-            <Link
-              onClick={() => setOpen(false)}
-              to="/contact"
-              className="hover:text-gray-300"
-            >
-              CONTACT US
+              {/* Logo Icon */}
+
+              <motion.div
+                whileHover={{
+                  rotate: 8,
+                  scale: 1.05,
+                }}
+                transition={{
+                  duration: 0.2,
+                }}
+                className="
+                  flex
+                  h-9
+                  w-9
+                  items-center
+                  justify-center
+                  rounded-xl
+                  bg-blue-500
+                  text-sm
+                  font-bold
+                  text-white
+                  shadow-lg
+                  shadow-blue-500/20
+                "
+              >
+                U
+              </motion.div>
+
+              {/* Brand Name */}
+
+              <div className="leading-none">
+                <div className="text-xl font-bold tracking-tight sm:text-2xl">
+                  <span className="text-blue-500">Urban</span>
+                  <span className="text-white">Nest</span>
+                </div>
+
+                <p className="mt-1 hidden text-[8px] font-medium uppercase tracking-[0.25em] text-white/50 sm:block">
+                  Find your place
+                </p>
+              </div>
             </Link>
 
-            <div className="flex items-center gap-6 pt-2 text-lg pe-3 ps-3">
-              <CiSearch className="hover:text-gray-300" />
+            {/* =================================================
+                DESKTOP NAVIGATION
+            ================================================= */}
+
+            <nav className="hidden items-center gap-6 lg:flex xl:gap-8">
+              {navLinks.map((link) => {
+                const isActive = location.pathname === link.path;
+
+                return (
+                  <Link
+                    key={link.path}
+                    to={link.path}
+                    className={`
+                      group
+                      relative
+                      py-3
+                      text-[11px]
+                      font-semibold
+                      tracking-[0.12em]
+                      transition-colors
+                      duration-300
+
+                      ${
+                        isActive
+                          ? "text-blue-400"
+                          : "text-white/75 hover:text-white"
+                      }
+                    `}
+                  >
+                    {link.name}
+
+                    {/* Active / Hover Line */}
+
+                    <span
+                      className={`
+                        absolute
+                        bottom-1
+                        left-1/2
+                        h-[2px]
+                        -translate-x-1/2
+                        rounded-full
+                        bg-blue-400
+                        transition-all
+                        duration-300
+
+                        ${isActive ? "w-5" : "w-0 group-hover:w-5"}
+                      `}
+                    />
+                  </Link>
+                );
+              })}
+            </nav>
+
+            {/* =================================================
+                RIGHT SIDE ACTIONS
+            ================================================= */}
+
+            <div className="hidden items-center gap-2 md:flex">
+              {/* Search */}
+
+              <motion.button
+                type="button"
+                whileHover={{
+                  scale: 1.08,
+                }}
+                whileTap={{
+                  scale: 0.92,
+                }}
+                className="
+                  group
+                  flex
+                  h-10
+                  w-10
+                  items-center
+                  justify-center
+                  rounded-full
+                  text-xl
+                  text-white/80
+                  transition
+                  duration-300
+                  hover:bg-white/10
+                  hover:text-blue-400
+                "
+                aria-label="Search properties"
+              >
+                <CiSearch className="transition-transform duration-300 group-hover:scale-110" />
+              </motion.button>
+
+              {/* Divider */}
+
+              <span className="mx-1 h-6 w-px bg-white/15" />
+
+              {/* Login / Account */}
 
               {!loggedIn ? (
-                <button onClick={() => setLoginOpen(true)}>
-                  <CiUser className="hover:text-gray-300" />
-                </button>
+                <motion.button
+                  type="button"
+                  onClick={() => setLoginOpen(true)}
+                  whileHover={{
+                    scale: 1.03,
+                  }}
+                  whileTap={{
+                    scale: 0.97,
+                  }}
+                  className="
+                    flex
+                    items-center
+                    gap-2
+                    rounded-full
+                    border
+                    border-white/15
+                    px-4
+                    py-2
+                    text-xs
+                    font-semibold
+                    text-white
+                    transition
+                    duration-300
+                    hover:border-blue-400/50
+                    hover:bg-white/5
+                  "
+                >
+                  <CiUser className="text-lg" />
+                  <span>Sign In</span>
+                </motion.button>
               ) : (
-                <button
+                <motion.button
+                  type="button"
+                  whileHover={{
+                    scale: 1.03,
+                  }}
+                  whileTap={{
+                    scale: 0.97,
+                  }}
                   onClick={() => {
                     localStorage.removeItem("loggedIn");
                     window.location.reload();
                   }}
+                  className="
+                    rounded-full
+                    border
+                    border-white/20
+                    px-4
+                    py-2
+                    text-[10px]
+                    font-semibold
+                    tracking-[0.12em]
+                    text-white
+                    transition
+                    duration-300
+                    hover:border-blue-400
+                    hover:bg-blue-500
+                  "
                 >
-                  Logout
-                </button>
+                  LOGOUT
+                </motion.button>
               )}
+
+              {/* =================================================
+                  EXPLORE PROPERTIES CTA
+              ================================================= */}
+
+              <motion.div
+                whileHover={{
+                  scale: 1.03,
+                }}
+                whileTap={{
+                  scale: 0.97,
+                }}
+                className="ml-1"
+              >
+                <Link
+                  to="/projects"
+                  className="
+                    group
+                    flex
+                    items-center
+                    gap-2
+                    rounded-full
+                    bg-blue-500
+                    px-5
+                    py-2.5
+                    text-[10px]
+                    font-bold
+                    tracking-[0.08em]
+                    text-white
+                    shadow-lg
+                    shadow-blue-500/20
+                    transition
+                    duration-300
+                    hover:bg-blue-600
+                  "
+                >
+                  <span>EXPLORE PROPERTIES</span>
+
+                  <span className="transition-transform duration-300 group-hover:translate-x-1">
+                    →
+                  </span>
+                </Link>
+              </motion.div>
             </div>
-          </nav>
-        </div>
-      )}
+
+            {/* =================================================
+                MOBILE MENU BUTTON
+            ================================================= */}
+
+            <motion.button
+              type="button"
+              whileTap={{
+                scale: 0.88,
+              }}
+              onClick={() => setOpen((prev) => !prev)}
+              className="
+                flex
+                h-10
+                w-10
+                items-center
+                justify-center
+                rounded-full
+                text-3xl
+                text-white
+                transition
+                duration-300
+                hover:bg-white/10
+                hover:text-blue-400
+                md:flex
+                lg:hidden
+              "
+              aria-label="Toggle navigation menu"
+            >
+              <AnimatePresence mode="wait">
+                {open ? (
+                  <motion.span
+                    key="close"
+                    initial={{
+                      rotate: -90,
+                      opacity: 0,
+                    }}
+                    animate={{
+                      rotate: 0,
+                      opacity: 1,
+                    }}
+                    exit={{
+                      rotate: 90,
+                      opacity: 0,
+                    }}
+                  >
+                    <HiX />
+                  </motion.span>
+                ) : (
+                  <motion.span
+                    key="menu"
+                    initial={{
+                      rotate: 90,
+                      opacity: 0,
+                    }}
+                    animate={{
+                      rotate: 0,
+                      opacity: 1,
+                    }}
+                    exit={{
+                      rotate: -90,
+                      opacity: 0,
+                    }}
+                  >
+                    <HiMenu />
+                  </motion.span>
+                )}
+              </AnimatePresence>
+            </motion.button>
+          </motion.div>
+
+          {/* =================================================
+              MOBILE NAVIGATION
+          ================================================= */}
+
+          <AnimatePresence>
+            {open && (
+              <motion.div
+                initial={{
+                  opacity: 0,
+                  height: 0,
+                  y: -10,
+                }}
+                animate={{
+                  opacity: 1,
+                  height: "auto",
+                  y: 0,
+                }}
+                exit={{
+                  opacity: 0,
+                  height: 0,
+                  y: -10,
+                }}
+                transition={{
+                  duration: 0.3,
+                  ease: "easeOut",
+                }}
+                className="
+                  mx-auto
+                  mt-2
+                  max-w-7xl
+                  overflow-hidden
+                  rounded-2xl
+                  border
+                  border-white/10
+                  bg-[#111827]
+                  shadow-2xl
+                  md:hidden
+                "
+              >
+                <nav className="px-5 py-4">
+                  {/* Mobile Links */}
+
+                  {navLinks.map((link, index) => {
+                    const isActive = location.pathname === link.path;
+
+                    return (
+                      <motion.div
+                        key={link.path}
+                        initial={{
+                          opacity: 0,
+                          x: -20,
+                        }}
+                        animate={{
+                          opacity: 1,
+                          x: 0,
+                        }}
+                        transition={{
+                          duration: 0.25,
+                          delay: index * 0.05,
+                        }}
+                      >
+                        <Link
+                          to={link.path}
+                          onClick={closeMenu}
+                          className={`
+                            flex
+                            items-center
+                            justify-between
+                            border-b
+                            border-white/10
+                            py-4
+                            text-sm
+                            font-semibold
+                            tracking-wide
+                            transition
+
+                            ${
+                              isActive
+                                ? "text-blue-400"
+                                : "text-white/80 hover:text-blue-300"
+                            }
+                          `}
+                        >
+                          <span>{link.name}</span>
+
+                          {isActive && (
+                            <span className="h-1.5 w-1.5 rounded-full bg-blue-400" />
+                          )}
+                        </Link>
+                      </motion.div>
+                    );
+                  })}
+
+                  {/* Mobile CTA */}
+
+                  <motion.div
+                    initial={{
+                      opacity: 0,
+                      y: 10,
+                    }}
+                    animate={{
+                      opacity: 1,
+                      y: 0,
+                    }}
+                    transition={{
+                      delay: 0.3,
+                    }}
+                    className="pt-5"
+                  >
+                    <Link
+                      to="/projects"
+                      onClick={closeMenu}
+                      className="
+                        flex
+                        w-full
+                        items-center
+                        justify-center
+                        gap-2
+                        rounded-full
+                        bg-blue-500
+                        px-5
+                        py-3
+                        text-sm
+                        font-semibold
+                        text-white
+                        transition
+                        duration-300
+                        hover:bg-blue-600
+                      "
+                    >
+                      <span>Explore Properties</span>
+                      <span>→</span>
+                    </Link>
+                  </motion.div>
+
+                  {/* Mobile Actions */}
+
+                  <div className="flex items-center gap-3 pt-4">
+                    {/* Search */}
+
+                    <motion.button
+                      type="button"
+                      whileTap={{
+                        scale: 0.9,
+                      }}
+                      className="
+                        flex
+                        h-10
+                        w-10
+                        items-center
+                        justify-center
+                        rounded-full
+                        text-2xl
+                        text-white/80
+                        transition
+                        hover:bg-white/10
+                        hover:text-blue-400
+                      "
+                      aria-label="Search"
+                    >
+                      <CiSearch />
+                    </motion.button>
+
+                    {/* Login */}
+
+                    {!loggedIn ? (
+                      <motion.button
+                        type="button"
+                        whileTap={{
+                          scale: 0.9,
+                        }}
+                        onClick={() => {
+                          setOpen(false);
+                          setLoginOpen(true);
+                        }}
+                        className="
+                          flex
+                          h-10
+                          items-center
+                          gap-2
+                          rounded-full
+                          border
+                          border-white/15
+                          px-4
+                          text-xs
+                          font-semibold
+                          text-white
+                          transition
+                          hover:border-blue-400/50
+                          hover:bg-white/5
+                        "
+                      >
+                        <CiUser className="text-lg" />
+                        Sign In
+                      </motion.button>
+                    ) : (
+                      <motion.button
+                        type="button"
+                        whileTap={{
+                          scale: 0.97,
+                        }}
+                        onClick={() => {
+                          localStorage.removeItem("loggedIn");
+                          window.location.reload();
+                        }}
+                        className="
+                          rounded-full
+                          border
+                          border-white/20
+                          px-5
+                          py-2
+                          text-xs
+                          font-semibold
+                          text-white
+                          transition
+                          hover:bg-blue-500
+                        "
+                      >
+                        LOGOUT
+                      </motion.button>
+                    )}
+                  </div>
+                </nav>
+              </motion.div>
+            )}
+          </AnimatePresence>
+        </motion.div>
+      </motion.header>
+
+      {/* =====================================================
+          LOGIN / REGISTER MODALS
+      ===================================================== */}
 
       <AnimatePresence>
         {loginOpen && (
@@ -299,6 +706,6 @@ export default function Navbar() {
           />
         )}
       </AnimatePresence>
-    </header>
+    </>
   );
 }

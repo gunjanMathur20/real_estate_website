@@ -1,109 +1,644 @@
 import React from "react";
-import { toast } from "react-toastify"; // Import toast notifications
+import { motion } from "framer-motion";
+import { toast } from "react-toastify";
+import {
+  FiPhone,
+  FiMail,
+  FiMapPin,
+  FiClock,
+  FiArrowRight,
+  FiSend,
+  FiCheckCircle,
+} from "react-icons/fi";
 
-// ContactPage component allows users to submit a contact form
 export default function ContactPage() {
-  const [result, setResult] = React.useState(""); // State to show form submission status
+  const [result, setResult] = React.useState("");
 
-  // Function to handle form submission
   const onSubmit = async (event) => {
-    event.preventDefault(); // Prevent default form submission
-    setResult("Sending...."); // Show sending status
+    event.preventDefault();
+    setResult("Sending...");
 
-    const formData = new FormData(event.target); // Collect form data
-    formData.append("access_key", "0d799668-7d52-42c7-871f-565aff1bbe8c"); // Add API access key
+    const formData = new FormData(event.target);
 
-    // Send form data to Web3Forms API
-    const response = await fetch("https://api.web3forms.com/submit", {
-      method: "POST",
-      body: formData,
-    });
+    formData.append("access_key", "0d799668-7d52-42c7-871f-565aff1bbe8c");
 
-    const data = await response.json(); // Parse response
+    try {
+      const response = await fetch("https://api.web3forms.com/submit", {
+        method: "POST",
+        body: formData,
+      });
 
-    // Handle success or error
-    if (data.success) {
-      setResult(""); // Reset button text
-      toast.success("Form Submitted Successfully"); // Show success toast
-      event.target.reset(); // Clear form
-    } else {
-      console.log("Error", data); // Log error fff
-      toast.error(data.message); // Show error toast
-      setResult(""); // Reset button text
+      const data = await response.json();
+
+      if (data.success) {
+        setResult("");
+        toast.success("Your inquiry has been sent successfully!");
+        event.target.reset();
+      } else {
+        console.log("Error", data);
+        toast.error(data.message || "Something went wrong.");
+        setResult("");
+      }
+    } catch (error) {
+      console.error(error);
+      toast.error("Unable to send your message. Please try again.");
+      setResult("");
     }
   };
 
+  const contactInfo = [
+    {
+      icon: FiPhone,
+      title: "Call Us",
+      value: "+1 (800) 555-0198",
+      description: "Mon – Sat · 9:00 AM – 7:00 PM",
+    },
+    {
+      icon: FiMail,
+      title: "Email Us",
+      value: "hello@urbannest.com",
+      description: "We usually respond within 24 hours",
+    },
+    {
+      icon: FiMapPin,
+      title: "Our Office",
+      value: "Beverly Hills, California",
+      description: "1200 Wilshire Boulevard",
+    },
+    {
+      icon: FiClock,
+      title: "Office Hours",
+      value: "09:00 AM – 07:00 PM",
+      description: "Monday – Saturday",
+    },
+  ];
+
   return (
-    <>
-      {/* Main container */}
-      <div
-        className="text-center p-6 py-8 lg:px-32 w-full overflow-hidden"
-        id="Contact" // Section id for navigation
-      >
-        {/* Heading */}
-        <h1 className="text-center text-3xl sm:text-4xl lg:text-5xl font-bold mb-4 ">
-          Contact{" "}
-          <span className="underline underline-offset-4 decoration-1 under font-light">
-            With Us
-          </span>
-        </h1>
+    <main className="w-full overflow-hidden bg-white text-gray-900">
+      {/* =====================================================
+          PAGE INTRO
+      ====================================================== */}
 
-        {/* Subheading / description */}
-        <p className="text-center text-gray-500 mb-8 mx-auto text-base sm:text-lg md:text-xl lg:text-xl max-w-md sm:max-w-xl md:max-w-2xl">
-          Let’s turn your plans into reality. Connect with us today and take the
-          first step toward a brighter future.
-        </p>
+      <section className="border-b border-gray-100 bg-[#fafafa] px-6 pb-16 pt-14 sm:px-10 lg:px-16 lg:pb-20 lg:pt-20">
+        <div className="mx-auto max-w-7xl mt-10">
+          <motion.div
+            initial={{ opacity: 0, y: 18 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6 }}
+            className="flex items-center gap-3"
+          >
+            <span className="h-px w-8 bg-blue-600" />
 
-        {/* Contact form */}
-        <form
-          className="max-w-4xl mx-auto text-gray-600 pt-8"
-          action="submit"
-          onSubmit={onSubmit} // Handle form submission
+            <span className="text-xs font-semibold uppercase tracking-[0.22em] text-blue-600">
+              Contact UrbanNest
+            </span>
+          </motion.div>
+
+          <motion.h1
+            initial={{ opacity: 0, y: 22 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.7, delay: 0.08 }}
+            className="mt-5 max-w-4xl text-4xl font-semibold leading-[1.08] tracking-tight text-gray-950 sm:text-5xl lg:text-6xl"
+          >
+            Let's talk about your
+            <span className="block text-blue-600">next property.</span>
+          </motion.h1>
+
+          <motion.p
+            initial={{ opacity: 0, y: 18 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.7, delay: 0.16 }}
+            className="mt-6 max-w-2xl text-base leading-7 text-gray-500 sm:text-lg"
+          >
+            Whether you're looking to buy, rent, sell, or invest, our property
+            specialists are here to help you make a confident decision.
+          </motion.p>
+        </div>
+      </section>
+
+      {/* =====================================================
+          CONTACT INFORMATION
+      ====================================================== */}
+
+      <section className="px-6 py-14 sm:px-10 lg:px-16 lg:py-20">
+        <div className="mx-auto max-w-7xl">
+          <motion.div
+            initial={{ opacity: 0, y: 18 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6 }}
+            className="mb-8"
+          >
+            <p className="text-xs font-semibold uppercase tracking-[0.2em] text-blue-600">
+              Get In Touch
+            </p>
+
+            <h2 className="mt-2 text-2xl font-semibold tracking-tight text-gray-950 sm:text-3xl">
+              We're here to help
+            </h2>
+          </motion.div>
+
+          <div className="grid border-y border-gray-200 sm:grid-cols-2 lg:grid-cols-4">
+            {contactInfo.map((item, index) => {
+              const Icon = item.icon;
+
+              return (
+                <motion.div
+                  key={item.title}
+                  initial={{ opacity: 0, y: 18 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{
+                    duration: 0.5,
+                    delay: index * 0.08,
+                  }}
+                  className={`group px-5 py-7 sm:px-6 ${
+                    index !== 0
+                      ? "border-t border-gray-200 sm:border-l lg:border-t-0"
+                      : ""
+                  }`}
+                >
+                  <div className="flex items-start gap-4">
+                    <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg border border-blue-100 bg-blue-50 text-blue-600 transition duration-300 group-hover:bg-blue-600 group-hover:text-white">
+                      <Icon size={18} />
+                    </div>
+
+                    <div className="min-w-0">
+                      <p className="text-xs font-semibold uppercase tracking-wider text-gray-400">
+                        {item.title}
+                      </p>
+
+                      <p className="mt-2 break-words text-sm font-semibold text-gray-900">
+                        {item.value}
+                      </p>
+
+                      <p className="mt-1 text-xs leading-5 text-gray-500">
+                        {item.description}
+                      </p>
+                    </div>
+                  </div>
+                </motion.div>
+              );
+            })}
+          </div>
+        </div>
+      </section>
+
+      {/* =====================================================
+          CONTACT FORM AREA
+      ====================================================== */}
+
+      <section className="px-6 pb-16 sm:px-10 lg:px-16 lg:pb-20">
+        <div className="mx-auto max-w-7xl">
+          <div className="grid overflow-hidden border border-gray-200 lg:grid-cols-[0.72fr_1.28fr]">
+            {/* LEFT INFORMATION */}
+
+            <motion.div
+              initial={{ opacity: 0, x: -20 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.65 }}
+              className="bg-gray-950 p-8 text-white sm:p-10 lg:p-12"
+            >
+              <p className="text-xs font-semibold uppercase tracking-[0.2em] text-blue-400">
+                UrbanNest Realty
+              </p>
+
+              <h2 className="mt-5 text-3xl font-semibold leading-tight tracking-tight sm:text-4xl">
+                A better property
+                <span className="block text-blue-400">
+                  decision starts here.
+                </span>
+              </h2>
+
+              <p className="mt-5 max-w-md text-sm leading-7 text-gray-400">
+                Tell us what you're looking for and we'll help you narrow down
+                the right options based on your needs, location and budget.
+              </p>
+
+              {/* Benefits */}
+
+              <div className="mt-9 space-y-5">
+                <div className="flex items-start gap-3">
+                  <FiCheckCircle
+                    className="mt-0.5 shrink-0 text-blue-400"
+                    size={18}
+                  />
+
+                  <div>
+                    <p className="text-sm font-medium text-white">
+                      Personalised property guidance
+                    </p>
+
+                    <p className="mt-1 text-xs leading-5 text-gray-500">
+                      Recommendations based on your requirements.
+                    </p>
+                  </div>
+                </div>
+
+                <div className="flex items-start gap-3">
+                  <FiCheckCircle
+                    className="mt-0.5 shrink-0 text-blue-400"
+                    size={18}
+                  />
+
+                  <div>
+                    <p className="text-sm font-medium text-white">
+                      Local market expertise
+                    </p>
+
+                    <p className="mt-1 text-xs leading-5 text-gray-500">
+                      Insights to help you choose with confidence.
+                    </p>
+                  </div>
+                </div>
+
+                <div className="flex items-start gap-3">
+                  <FiCheckCircle
+                    className="mt-0.5 shrink-0 text-blue-400"
+                    size={18}
+                  />
+
+                  <div>
+                    <p className="text-sm font-medium text-white">
+                      Transparent communication
+                    </p>
+
+                    <p className="mt-1 text-xs leading-5 text-gray-500">
+                      Clear answers from the first conversation.
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+              {/* Office */}
+
+              <div className="mt-12 border-t border-white/10 pt-7">
+                <div className="flex gap-3">
+                  <FiMapPin className="mt-1 shrink-0 text-blue-400" size={18} />
+
+                  <div>
+                    <p className="text-sm font-medium text-white">
+                      Head Office
+                    </p>
+
+                    <p className="mt-1 text-xs leading-5 text-gray-500">
+                      1200 Wilshire Boulevard
+                      <br />
+                      Beverly Hills, California
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </motion.div>
+
+            {/* FORM */}
+
+            <motion.div
+              initial={{ opacity: 0, x: 20 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.65 }}
+              className="bg-white p-7 sm:p-10 lg:p-12"
+            >
+              <div className="mb-8">
+                <p className="text-xs font-semibold uppercase tracking-[0.2em] text-blue-600">
+                  Property Inquiry
+                </p>
+
+                <h2 className="mt-2 text-2xl font-semibold tracking-tight text-gray-950 sm:text-3xl">
+                  Tell us what you need
+                </h2>
+
+                <p className="mt-2 max-w-lg text-sm leading-6 text-gray-500">
+                  Share a few details and one of our property advisors will get
+                  back to you.
+                </p>
+              </div>
+
+              <form onSubmit={onSubmit} className="space-y-5">
+                {/* NAME + EMAIL */}
+
+                <div className="grid gap-5 sm:grid-cols-2">
+                  <div>
+                    <label className="mb-2 block text-xs font-semibold text-gray-700">
+                      Full Name
+                    </label>
+
+                    <input
+                      type="text"
+                      name="name"
+                      placeholder="Your full name"
+                      required
+                      className="w-full border-b border-gray-300 bg-transparent px-0 py-3 text-sm text-gray-900 outline-none transition placeholder:text-gray-400 focus:border-blue-600"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="mb-2 block text-xs font-semibold text-gray-700">
+                      Email Address
+                    </label>
+
+                    <input
+                      type="email"
+                      name="email"
+                      placeholder="you@example.com"
+                      required
+                      className="w-full border-b border-gray-300 bg-transparent px-0 py-3 text-sm text-gray-900 outline-none transition placeholder:text-gray-400 focus:border-blue-600"
+                    />
+                  </div>
+                </div>
+
+                {/* PHONE + INTEREST */}
+
+                <div className="grid gap-5 sm:grid-cols-2">
+                  <div>
+                    <label className="mb-2 block text-xs font-semibold text-gray-700">
+                      Phone Number
+                    </label>
+
+                    <input
+                      type="tel"
+                      name="phone"
+                      placeholder="+1 000 000 0000"
+                      className="w-full border-b border-gray-300 bg-transparent px-0 py-3 text-sm text-gray-900 outline-none transition placeholder:text-gray-400 focus:border-blue-600"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="mb-2 block text-xs font-semibold text-gray-700">
+                      I'm Interested In
+                    </label>
+
+                    <select
+                      name="inquiry_type"
+                      className="w-full border-b border-gray-300 bg-transparent px-0 py-3 text-sm text-gray-800 outline-none transition focus:border-blue-600"
+                    >
+                      <option value="">Select an option</option>
+
+                      <option value="Buying a property">
+                        Buying a Property
+                      </option>
+
+                      <option value="Renting a property">
+                        Renting a Property
+                      </option>
+
+                      <option value="Selling a property">
+                        Selling a Property
+                      </option>
+
+                      <option value="Property investment">
+                        Property Investment
+                      </option>
+
+                      <option value="General enquiry">General Enquiry</option>
+                    </select>
+                  </div>
+                </div>
+
+                {/* PROPERTY TYPE + BUDGET */}
+
+                <div className="grid gap-5 sm:grid-cols-2">
+                  <div>
+                    <label className="mb-2 block text-xs font-semibold text-gray-700">
+                      Property Type
+                    </label>
+
+                    <select
+                      name="property_type"
+                      className="w-full border-b border-gray-300 bg-transparent px-0 py-3 text-sm text-gray-800 outline-none transition focus:border-blue-600"
+                    >
+                      <option value="">Select property type</option>
+
+                      <option value="Apartment">Apartment</option>
+
+                      <option value="Villa">Villa</option>
+
+                      <option value="House">House</option>
+
+                      <option value="Office">Office</option>
+
+                      <option value="Commercial">Commercial</option>
+                    </select>
+                  </div>
+
+                  <div>
+                    <label className="mb-2 block text-xs font-semibold text-gray-700">
+                      Budget Range
+                    </label>
+
+                    <select
+                      name="budget"
+                      className="w-full border-b border-gray-300 bg-transparent px-0 py-3 text-sm text-gray-800 outline-none transition focus:border-blue-600"
+                    >
+                      <option value="">Select budget</option>
+
+                      <option value="Under $500K">Under $500K</option>
+
+                      <option value="$500K - $1M">$500K – $1M</option>
+
+                      <option value="$1M - $2M">$1M – $2M</option>
+
+                      <option value="$2M+">$2M+</option>
+                    </select>
+                  </div>
+                </div>
+
+                {/* LOCATION */}
+
+                <div>
+                  <label className="mb-2 block text-xs font-semibold text-gray-700">
+                    Preferred Location
+                  </label>
+
+                  <input
+                    type="text"
+                    name="location"
+                    placeholder="City, neighbourhood or area"
+                    className="w-full border-b border-gray-300 bg-transparent px-0 py-3 text-sm text-gray-900 outline-none transition placeholder:text-gray-400 focus:border-blue-600"
+                  />
+                </div>
+
+                {/* MESSAGE */}
+
+                <div>
+                  <label className="mb-2 block text-xs font-semibold text-gray-700">
+                    Message
+                  </label>
+
+                  <textarea
+                    name="message"
+                    rows="4"
+                    placeholder="Tell us a little about the property you're looking for..."
+                    required
+                    className="w-full resize-none border-b border-gray-300 bg-transparent px-0 py-3 text-sm leading-6 text-gray-900 outline-none transition placeholder:text-gray-400 focus:border-blue-600"
+                  />
+                </div>
+
+                {/* SUBMIT */}
+
+                <div className="pt-2">
+                  <motion.button
+                    type="submit"
+                    whileHover={{ x: 3 }}
+                    whileTap={{ scale: 0.98 }}
+                    disabled={result === "Sending..."}
+                    className="group inline-flex items-center gap-3 bg-blue-600 px-7 py-3.5 text-sm font-semibold text-white transition duration-300 hover:bg-blue-700 disabled:cursor-not-allowed disabled:opacity-70"
+                  >
+                    <span>{result || "Send Property Inquiry"}</span>
+
+                    {!result && (
+                      <FiArrowRight
+                        className="transition-transform duration-300 group-hover:translate-x-1"
+                        size={17}
+                      />
+                    )}
+                  </motion.button>
+                </div>
+
+                <p className="text-xs leading-5 text-gray-400">
+                  Your information is only used to respond to your property
+                  inquiry.
+                </p>
+              </form>
+            </motion.div>
+          </div>
+        </div>
+      </section>
+
+      {/* =====================================================
+          OFFICE LOCATION
+      ====================================================== */}
+
+      <section className="border-t border-gray-100 bg-[#fafafa] px-6 py-14 sm:px-10 lg:px-16 lg:py-16">
+        <div className="mx-auto max-w-7xl">
+          <div className="grid items-center gap-10 md:grid-cols-2">
+            <motion.div
+              initial={{ opacity: 0, x: -20 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.6 }}
+            >
+              <p className="text-xs font-semibold uppercase tracking-[0.2em] text-blue-600">
+                Visit Us
+              </p>
+
+              <h2 className="mt-3 text-3xl font-semibold tracking-tight text-gray-950 sm:text-4xl">
+                Come meet our team.
+              </h2>
+
+              <p className="mt-4 max-w-lg text-sm leading-7 text-gray-500">
+                Prefer a face-to-face conversation? Visit our office and speak
+                with one of our property specialists.
+              </p>
+
+              <div className="mt-6 flex items-start gap-3">
+                <FiMapPin className="mt-1 shrink-0 text-blue-600" size={19} />
+
+                <div>
+                  <p className="text-sm font-semibold text-gray-900">
+                    UrbanNest Realty
+                  </p>
+
+                  <p className="mt-1 text-sm leading-6 text-gray-500">
+                    1200 Wilshire Boulevard
+                    <br />
+                    Beverly Hills, California
+                  </p>
+                </div>
+              </div>
+
+              <button
+                type="button"
+                className="group mt-7 inline-flex items-center gap-2 text-sm font-semibold text-gray-900 transition hover:text-blue-600"
+              >
+                Get Directions
+                <FiArrowRight
+                  size={16}
+                  className="transition-transform duration-300 group-hover:translate-x-1"
+                />
+              </button>
+            </motion.div>
+
+            {/* Minimal map placeholder */}
+
+            <motion.div
+              initial={{ opacity: 0, x: 20 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.6 }}
+              className="relative flex min-h-[260px] items-center justify-center overflow-hidden border border-gray-200 bg-white"
+            >
+              <div className="absolute inset-0 opacity-40">
+                <div className="absolute left-[15%] top-[30%] h-px w-[70%] rotate-[12deg] bg-gray-300" />
+                <div className="absolute left-[5%] top-[55%] h-px w-[90%] rotate-[-8deg] bg-gray-300" />
+                <div className="absolute left-[35%] top-[5%] h-[90%] w-px rotate-[18deg] bg-gray-300" />
+                <div className="absolute left-[65%] top-[5%] h-[90%] w-px rotate-[-12deg] bg-gray-300" />
+              </div>
+
+              <div className="relative z-10 text-center">
+                <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-blue-600 text-white shadow-md">
+                  <FiMapPin size={20} />
+                </div>
+
+                <p className="mt-4 text-sm font-semibold text-gray-900">
+                  Beverly Hills
+                </p>
+
+                <p className="mt-1 text-xs text-gray-500">UrbanNest Realty</p>
+              </div>
+            </motion.div>
+          </div>
+        </div>
+      </section>
+
+      {/* =====================================================
+          FINAL CTA
+      ====================================================== */}
+
+      <section className="px-6 py-14 sm:px-10 lg:px-16 lg:py-20">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.6 }}
+          className="mx-auto max-w-5xl border border-gray-200 bg-white px-7 py-10 text-center sm:px-10 sm:py-12"
         >
-          {/* Name and Email fields */}
-          <div className="flex flex-wrap">
-            <div className="w-full md:w-1/2 text-left mb-4">
-              Your Name
-              <input
-                className="w-full border border-gray-300 rounded py-3 px-4 mt-2 focus:outline-none"
-                type="text"
-                name="name"
-                placeholder="Your Name"
-                required
-              />
-            </div>
+          <p className="text-xs font-semibold uppercase tracking-[0.2em] text-blue-600">
+            Your Next Move
+          </p>
 
-            <div className="w-full md:w-1/2 text-left md:pl-4">
-              Your Email
-              <input
-                className="w-full border border-gray-300 rounded py-3 px-4 mt-2 focus:outline-none"
-                type="email"
-                name="email"
-                placeholder="Your Email"
-                required
-              />
-            </div>
-          </div>
+          <h2 className="mt-3 text-3xl font-semibold tracking-tight text-gray-950 sm:text-4xl">
+            Ready to find your next property?
+          </h2>
 
-          {/* Message field */}
-          <div className="py-6 text-left">
-            Message
-            <textarea
-              className="w-full border border-gray-300 rounded py-3 px-4 mt-2 h-45 resize-none focus:outline-none"
-              name="Message"
-              id="#"
-              placeholder="Message"
-              required
-            ></textarea>
-          </div>
+          <p className="mx-auto mt-3 max-w-xl text-sm leading-6 text-gray-500">
+            Let's turn your property goals into a clear plan and find a space
+            that feels right for you.
+          </p>
 
-          {/* Submit button */}
-          <button className="bg-blue-600 text-white py-2 px-12 mb-10 rounded cursor-pointer">
-            {result ? result : "Send Message"}{" "}
-            {/* Show sending status or default text */}
+          <button
+            type="button"
+            onClick={() =>
+              window.scrollTo({
+                top: 0,
+                behavior: "smooth",
+              })
+            }
+            className="group mt-6 inline-flex items-center gap-2 text-sm font-semibold text-gray-900 transition hover:text-blue-600"
+          >
+            Start a conversation
+            <FiArrowRight
+              size={17}
+              className="transition-transform duration-300 group-hover:translate-x-1"
+            />
           </button>
-        </form>
-      </div>
-    </>
+        </motion.div>
+      </section>
+    </main>
   );
 }
