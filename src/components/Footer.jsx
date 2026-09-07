@@ -12,8 +12,11 @@ import {
 } from "react-icons/fi";
 
 export default function Footer() {
+  // Get the current year dynamically for the copyright text.
   const currentYear = new Date().getFullYear();
 
+  // Social media links displayed in the footer.
+  // The href values can be replaced with actual social media URLs later.
   const socialLinks = [
     {
       label: "Instagram",
@@ -37,6 +40,7 @@ export default function Footer() {
     },
   ];
 
+  // Main navigation links used in the "Explore" section.
   const exploreLinks = [
     { label: "Home", path: "/" },
     { label: "About Us", path: "/about" },
@@ -45,6 +49,7 @@ export default function Footer() {
     { label: "Contact", path: "/contact" },
   ];
 
+  // Services offered by UrbanNest Realty.
   const services = [
     "Buy a Property",
     "Rent a Property",
@@ -57,6 +62,7 @@ export default function Footer() {
     <footer className="relative overflow-hidden border-t border-gray-200 bg-[#f7f9fc]">
       {/* =====================================================
           SUBTLE BACKGROUND ACCENT
+          Decorative circles that add depth to the footer.
       ====================================================== */}
 
       <div className="pointer-events-none absolute right-0 top-0 h-72 w-72 translate-x-1/3 -translate-y-1/3 rounded-full bg-blue-100/50" />
@@ -66,6 +72,7 @@ export default function Footer() {
       <div className="relative mx-auto max-w-7xl px-6 py-16 sm:px-10 lg:px-16 lg:py-20">
         {/* =====================================================
             TOP BRAND STATEMENT
+            Introduces the brand and its core message.
         ====================================================== */}
 
         <div className="mb-14 flex flex-col gap-6 border-b border-gray-200 pb-12 lg:flex-row lg:items-end lg:justify-between">
@@ -95,12 +102,15 @@ export default function Footer() {
 
         {/* =====================================================
             MAIN FOOTER GRID
+            Contains brand information, navigation, services,
+            and contact details.
         ====================================================== */}
 
         <div className="grid gap-12 lg:grid-cols-[1.45fr_0.75fr_0.85fr_1.15fr]">
           {/* ================= BRAND ================= */}
 
           <div className="max-w-sm">
+            {/* Brand logo/name linking back to the homepage. */}
             <Link
               to="/"
               className="inline-flex items-center text-2xl font-semibold tracking-tight text-gray-950"
@@ -118,8 +128,7 @@ export default function Footer() {
               exploring an investment opportunity, we're here to help.
             </p>
 
-            {/* Social */}
-
+            {/* Social media links. */}
             <div className="mt-7 flex items-center gap-2.5">
               {socialLinks.map(({ label, icon: Icon, href }) => (
                 <a
@@ -141,6 +150,7 @@ export default function Footer() {
               Explore
             </h3>
 
+            {/* Render navigation links from the exploreLinks array. */}
             <ul className="mt-6 space-y-4">
               {exploreLinks.map((item) => (
                 <li key={item.label}>
@@ -167,6 +177,7 @@ export default function Footer() {
               Services
             </h3>
 
+            {/* Display the available real estate services. */}
             <ul className="mt-6 space-y-4">
               {services.map((service) => (
                 <li key={service}>
@@ -189,8 +200,7 @@ export default function Footer() {
               Have a property in mind? Let's talk about what you're looking for.
             </p>
 
-            {/* Newsletter */}
-
+            {/* Newsletter subscription form. */}
             <form className="mt-5 flex rounded-xl border border-gray-200 bg-white p-1 shadow-sm">
               <input
                 type="email"
@@ -208,8 +218,8 @@ export default function Footer() {
             </form>
 
             {/* Contact Details */}
-
             <div className="mt-7 space-y-4">
+              {/* Email contact information. */}
               <a
                 href="mailto:hello@urbannest.com"
                 className="group flex items-center gap-3 text-sm text-gray-500 transition-colors hover:text-blue-600"
@@ -220,6 +230,7 @@ export default function Footer() {
                 hello@urbannest.com
               </a>
 
+              {/* Phone contact information. */}
               <a
                 href="tel:+18005550198"
                 className="group flex items-center gap-3 text-sm text-gray-500 transition-colors hover:text-blue-600"
@@ -230,6 +241,7 @@ export default function Footer() {
                 +1 (800) 555-0198
               </a>
 
+              {/* Physical office address. */}
               <div className="flex items-start gap-3 text-sm leading-6 text-gray-500">
                 <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-white text-gray-500 shadow-sm">
                   <FiMapPin size={14} />
@@ -247,11 +259,11 @@ export default function Footer() {
 
         {/* =====================================================
             CTA SECTION
+            Encourages visitors to explore available properties.
         ====================================================== */}
 
         <div className="relative mt-16 overflow-hidden rounded-2xl bg-gray-950 px-6 py-8 sm:px-8 lg:px-10">
-          {/* Small accent */}
-
+          {/* Decorative accent on the right side of the CTA. */}
           <div className="absolute right-0 top-0 h-full w-1/3 bg-blue-600/10" />
 
           <div className="relative flex flex-col gap-6 sm:flex-row sm:items-center sm:justify-between">
@@ -270,6 +282,7 @@ export default function Footer() {
               </p>
             </div>
 
+            {/* CTA button linking to the properties/projects page. */}
             <Link
               to="/projects"
               className="group inline-flex w-fit shrink-0 items-center gap-2 rounded-full bg-blue-600 px-6 py-3 text-sm font-semibold text-white transition-all duration-300 hover:bg-blue-500"
@@ -285,12 +298,14 @@ export default function Footer() {
 
         {/* =====================================================
             BOTTOM BAR
+            Contains copyright information and secondary links.
         ====================================================== */}
 
         <div className="mt-8 flex flex-col gap-5 border-t border-gray-200 pt-7 text-xs text-gray-400 sm:flex-row sm:items-center sm:justify-between">
           <p>© {currentYear} UrbanNest Realty. All rights reserved.</p>
 
           <div className="flex flex-wrap items-center gap-5">
+            {/* Placeholder links for legal pages. */}
             <Link to="/" className="transition-colors hover:text-gray-700">
               Privacy Policy
             </Link>

@@ -1,9 +1,20 @@
+// React library for creating the component
 import React from "react";
+
+// Framer Motion is used for scroll-based entrance animations
+// and hover animations on testimonial cards
 import { motion } from "framer-motion";
+
+// Import required assets and testimonial data
+// assets contains images/icons such as the star icon
+// testimonialsData contains all client testimonial information
 import { assets, testimonialsData } from "../assets/assets";
+
+// ================= TESTIMONIALS PAGE =================
 
 export default function TestimonialsPage() {
   return (
+    // Main Testimonials section
     <section
       id="Testimonials"
       className="
@@ -21,20 +32,27 @@ export default function TestimonialsPage() {
     >
       {/* =====================================================
           SECTION HEADER
+          Contains the label, heading and description
       ====================================================== */}
 
       <div className="mx-auto mb-12 max-w-3xl text-center sm:mb-14">
-        {/* Small Label */}
+        {/* Small section label with decorative lines */}
 
         <motion.div
+          // Initial animation state
           initial={{ opacity: 0, y: 15 }}
+          // Animation state when the element enters the viewport
           whileInView={{ opacity: 1, y: 0 }}
+          // Animation runs only once
           viewport={{ once: true, amount: 0.3 }}
+          // Animation duration
           transition={{ duration: 0.6 }}
           className="mb-5 flex items-center justify-center gap-3"
         >
+          {/* Left decorative line */}
           <span className="h-px w-8 bg-blue-500 sm:w-10" />
 
+          {/* Section label */}
           <span
             className="
               text-[11px]
@@ -48,15 +66,20 @@ export default function TestimonialsPage() {
             Client Stories
           </span>
 
+          {/* Right decorative line */}
           <span className="h-px w-8 bg-blue-500 sm:w-10" />
         </motion.div>
 
-        {/* Heading */}
+        {/* ================= MAIN HEADING ================= */}
 
         <motion.h2
+          // Heading starts slightly lower and transparent
           initial={{ opacity: 0, y: 25 }}
+          // Heading moves into its final position
           whileInView={{ opacity: 1, y: 0 }}
+          // Animation happens only once
           viewport={{ once: true, amount: 0.3 }}
+          // Heading animation timing
           transition={{
             duration: 0.7,
             delay: 0.1,
@@ -72,17 +95,23 @@ export default function TestimonialsPage() {
             md:text-5xl
           "
         >
+          {/* First line of heading */}
           Trusted by People.
           <br />
+          {/* Highlighted second line */}
           <span className="text-blue-600">Loved for the Experience.</span>
         </motion.h2>
 
-        {/* Description */}
+        {/* ================= DESCRIPTION ================= */}
 
         <motion.p
+          // Initial animation
           initial={{ opacity: 0, y: 20 }}
+          // Final animation state
           whileInView={{ opacity: 1, y: 0 }}
+          // Trigger animation when the element enters viewport
           viewport={{ once: true, amount: 0.3 }}
+          // Slight delay after the heading animation
           transition={{
             duration: 0.7,
             delay: 0.2,
@@ -105,29 +134,38 @@ export default function TestimonialsPage() {
 
       {/* =====================================================
           MOBILE / TABLET SWIPE AREA
+          On smaller screens testimonials behave like a
+          horizontal swipeable carousel.
       ====================================================== */}
 
       <div className="mx-auto max-w-7xl">
-        {/* Slider top information */}
+        {/* ================= SLIDER TOP INFORMATION ================= */}
 
         <div className="mb-5 flex items-center justify-between">
+          {/* Small label above testimonial cards */}
           <div>
             <p className="text-xs font-semibold uppercase tracking-[0.18em] text-gray-400">
               Client Reviews
             </p>
           </div>
 
-          {/* Mobile / Tablet Swipe Indicator */}
+          {/* Swipe indicator
+              Hidden on large screens because cards become a grid */}
 
           <div className="flex items-center gap-2 text-xs text-gray-400 lg:hidden">
+            {/* Instruction for mobile/tablet users */}
             <span>Swipe</span>
 
+            {/* Arrow indicating horizontal movement */}
             <span className="text-base text-blue-500">→</span>
           </div>
         </div>
 
         {/* =====================================================
-            CARDS
+            TESTIMONIAL CARDS CONTAINER
+            - Mobile: one card at a time
+            - Tablet: two cards visible
+            - Desktop: three-column grid
         ====================================================== */}
 
         <div
@@ -145,32 +183,43 @@ export default function TestimonialsPage() {
             lg:overflow-visible
             lg:pb-0
           "
+          // Hide scrollbar while keeping horizontal scrolling
+          // enabled on mobile and tablet
           style={{
             scrollbarWidth: "none",
             msOverflowStyle: "none",
             WebkitOverflowScrolling: "touch",
           }}
         >
+          {/* Loop through every testimonial from testimonialsData */}
+
           {testimonialsData.map((testimonial, idx) => (
             <motion.article
+              // Unique key for each testimonial card
               key={idx}
+              // Initial card animation
               initial={{
                 opacity: 0,
                 y: 30,
               }}
+              // Final card animation when visible
               whileInView={{
                 opacity: 1,
                 y: 0,
               }}
+              // Trigger animation only once
               viewport={{
                 once: true,
                 amount: 0.15,
               }}
+              // Each card gets a slightly different delay
+              // to create a staggered entrance effect
               transition={{
                 duration: 0.6,
                 delay: idx * 0.12,
                 ease: "easeOut",
               }}
+              // Card moves slightly upward on hover
               whileHover={{
                 y: -7,
               }}
@@ -197,6 +246,7 @@ export default function TestimonialsPage() {
             >
               {/* =================================================
                   BLUE TOP ACCENT
+                  Appears when the testimonial card is hovered
               ================================================== */}
 
               <div
@@ -216,6 +266,7 @@ export default function TestimonialsPage() {
 
               {/* =================================================
                   QUOTE DECORATION
+                  Large decorative quotation mark in background
               ================================================== */}
 
               <div
@@ -238,10 +289,12 @@ export default function TestimonialsPage() {
               </div>
 
               {/* =================================================
-                  PROFILE
+                  CLIENT PROFILE
+                  Displays client image, name and designation
               ================================================== */}
 
               <div className="relative z-10 flex items-center gap-4">
+                {/* Client profile image container */}
                 <div
                   className="
                     h-[64px]
@@ -254,6 +307,7 @@ export default function TestimonialsPage() {
                     bg-gray-100
                   "
                 >
+                  {/* Client profile image */}
                   <img
                     src={testimonial.image}
                     alt={testimonial.alt}
@@ -268,7 +322,9 @@ export default function TestimonialsPage() {
                   />
                 </div>
 
+                {/* Client information */}
                 <div className="min-w-0">
+                  {/* Client name */}
                   <h3
                     className="
                       truncate
@@ -281,6 +337,7 @@ export default function TestimonialsPage() {
                     {testimonial.name}
                   </h3>
 
+                  {/* Client title/designation */}
                   <p className="mt-1 text-xs text-gray-500 sm:text-sm">
                     {testimonial.title}
                   </p>
@@ -289,28 +346,37 @@ export default function TestimonialsPage() {
 
               {/* =================================================
                   RATING
+                  Displays five stars based on testimonial.rating
               ================================================== */}
 
               <div className="mt-6 flex items-center gap-3">
+                {/* Star rating container */}
                 <div className="flex gap-1">
+                  {/* Create exactly five stars */}
                   {Array.from({ length: 5 }).map((_, starIndex) => (
                     <img
+                      // Unique key for each star
                       key={starIndex}
+                      // Star icon from assets
                       src={assets.star_icon}
+                      // Accessibility text
                       alt="rating star"
                       className={`
                         h-4
                         w-4
                         ${
+                          // Fully visible stars are based on rating
                           starIndex < testimonial.rating
                             ? "opacity-100"
-                            : "opacity-20"
+                            : // Remaining stars appear faded
+                              "opacity-20"
                         }
                       `}
                     />
                   ))}
                 </div>
 
+                {/* Numeric rating badge */}
                 <span
                   className="
                     rounded-full
@@ -333,7 +399,7 @@ export default function TestimonialsPage() {
               <div className="my-6 h-px w-full bg-gray-100" />
 
               {/* =================================================
-                  REVIEW
+                  CLIENT REVIEW
               ================================================== */}
 
               <p
@@ -345,11 +411,13 @@ export default function TestimonialsPage() {
                   sm:text-[15px]
                 "
               >
-                “{testimonial.text}”
+                {/* Display testimonial text inside quotation marks */}“
+                {testimonial.text}”
               </p>
 
               {/* =================================================
                   VERIFIED CLIENT
+                  Bottom section showing verification status
               ================================================== */}
 
               <div
@@ -363,7 +431,9 @@ export default function TestimonialsPage() {
                   pt-5
                 "
               >
+                {/* Verified client label */}
                 <div className="flex items-center gap-2">
+                  {/* Verification check icon */}
                   <span
                     className="
                       flex
@@ -381,6 +451,7 @@ export default function TestimonialsPage() {
                     ✓
                   </span>
 
+                  {/* Verification text */}
                   <span
                     className="
                       text-[10px]
@@ -394,6 +465,7 @@ export default function TestimonialsPage() {
                   </span>
                 </div>
 
+                {/* Brand name */}
                 <span className="text-xs font-medium text-blue-500">
                   UrbanNest
                 </span>
@@ -405,21 +477,26 @@ export default function TestimonialsPage() {
 
       {/* =====================================================
           TRUST / RATING STRIP
+          Displays the overall client rating and trust message
       ====================================================== */}
 
       <motion.div
+        // Initial animation state
         initial={{
           opacity: 0,
           y: 25,
         }}
+        // Final animation state
         whileInView={{
           opacity: 1,
           y: 0,
         }}
+        // Animation triggers when the strip enters the viewport
         viewport={{
           once: true,
           amount: 0.3,
         }}
+        // Animation timing
         transition={{
           duration: 0.7,
           delay: 0.2,
@@ -445,31 +522,45 @@ export default function TestimonialsPage() {
           sm:px-8
         "
       >
+        {/* ================= TRUST MESSAGE ================= */}
+
         <div className="text-center sm:text-left">
+          {/* Main trust message */}
           <p className="text-base font-semibold text-gray-900 sm:text-lg">
             Your next property journey starts here.
           </p>
 
+          {/* Supporting trust message */}
           <p className="mt-1 text-xs text-gray-500 sm:text-sm">
             Trusted guidance. Better spaces. Confident decisions.
           </p>
         </div>
 
+        {/* ================= OVERALL RATING ================= */}
+
         <div className="flex items-center gap-3">
+          {/* Overall rating number */}
           <span className="text-3xl font-semibold text-blue-600">4.8</span>
 
+          {/* Rating stars and description */}
           <div>
+            {/* Display five rating stars */}
             <div className="flex gap-1">
               {Array.from({ length: 5 }).map((_, index) => (
                 <img
+                  // Unique key for each star
                   key={index}
+                  // Star icon from assets
                   src={assets.star_icon}
+                  // Accessibility text
                   alt="star"
+                  // Size of each star
                   className="h-3.5 w-3.5"
                 />
               ))}
             </div>
 
+            {/* Rating description */}
             <p className="mt-1 text-[10px] text-gray-400">
               Average client rating
             </p>

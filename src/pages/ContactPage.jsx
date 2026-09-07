@@ -1,6 +1,14 @@
+
+// React library used for creating the Contact page component and managing state.
 import React from "react";
+
+// Framer Motion used for entrance, hover, and interaction animations.
 import { motion } from "framer-motion";
+
+// Toast notifications used to show success and error messages to the user.
 import { toast } from "react-toastify";
+
+// Icons used throughout the contact page.
 import {
   FiPhone,
   FiMail,
@@ -12,40 +20,66 @@ import {
 } from "react-icons/fi";
 
 export default function ContactPage() {
+  // Stores the current form submission status, such as "Sending...".
   const [result, setResult] = React.useState("");
 
+  // Handles contact form submission and sends the form data to Web3Forms.
   const onSubmit = async (event) => {
+    // Prevents the browser from refreshing the page after form submission.
     event.preventDefault();
+
+    // Shows a sending status while the request is being processed.
     setResult("Sending...");
 
+    // Collects all form field values from the submitted form.
     const formData = new FormData(event.target);
 
+    // Adds the Web3Forms access key required to submit the form.
     formData.append("access_key", "0d799668-7d52-42c7-871f-565aff1bbe8c");
 
     try {
+      // Sends the contact form data to the Web3Forms API.
       const response = await fetch("https://api.web3forms.com/submit", {
         method: "POST",
         body: formData,
       });
 
+      // Converts the API response into a JavaScript object.
       const data = await response.json();
 
+      // Handles a successful form submission.
       if (data.success) {
+        // Clears the sending status.
         setResult("");
+
+        // Shows a success notification to the user.
         toast.success("Your inquiry has been sent successfully!");
+
+        // Resets all form fields after successful submission.
         event.target.reset();
       } else {
+        // Logs the API error details for debugging.
         console.log("Error", data);
+
+        // Displays the API error message or a fallback message.
         toast.error(data.message || "Something went wrong.");
+
+        // Clears the sending status.
         setResult("");
       }
     } catch (error) {
+      // Logs unexpected errors for debugging.
       console.error(error);
+
+      // Shows an error notification when the request cannot be completed.
       toast.error("Unable to send your message. Please try again.");
+
+      // Clears the sending status.
       setResult("");
     }
   };
 
+  // Contact information displayed in the "We're here to help" section.
   const contactInfo = [
     {
       icon: FiPhone,
@@ -77,10 +111,13 @@ export default function ContactPage() {
     <main className="w-full overflow-hidden bg-white text-gray-900">
       {/* =====================================================
           PAGE INTRO
-      ====================================================== */}
+          Main heading and introductory information.
+      ===================================================== */}
 
       <section className="border-b border-gray-100 bg-[#fafafa] px-6 pb-16 pt-14 sm:px-10 lg:px-16 lg:pb-20 lg:pt-20">
-        <div className="mx-auto max-w-7xl mt-10">
+        <div className="mx-auto mt-10 max-w-7xl">
+          {/* Animated contact page eyebrow. */}
+
           <motion.div
             initial={{ opacity: 0, y: 18 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -95,6 +132,8 @@ export default function ContactPage() {
             </span>
           </motion.div>
 
+          {/* Animated main page heading. */}
+
           <motion.h1
             initial={{ opacity: 0, y: 22 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -105,6 +144,8 @@ export default function ContactPage() {
             Let's talk about your
             <span className="block text-blue-600">next property.</span>
           </motion.h1>
+
+          {/* Short description explaining the purpose of the contact page. */}
 
           <motion.p
             initial={{ opacity: 0, y: 18 }}
@@ -121,10 +162,13 @@ export default function ContactPage() {
 
       {/* =====================================================
           CONTACT INFORMATION
-      ====================================================== */}
+          Displays phone, email, office location, and hours.
+      ===================================================== */}
 
       <section className="px-6 py-14 sm:px-10 lg:px-16 lg:py-20">
         <div className="mx-auto max-w-7xl">
+          {/* Section heading. */}
+
           <motion.div
             initial={{ opacity: 0, y: 18 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -141,8 +185,11 @@ export default function ContactPage() {
             </h2>
           </motion.div>
 
+          {/* Contact information cards are generated from the contactInfo array. */}
+
           <div className="grid border-y border-gray-200 sm:grid-cols-2 lg:grid-cols-4">
             {contactInfo.map((item, index) => {
+              // Gets the icon component stored in the current contact item.
               const Icon = item.icon;
 
               return (
@@ -151,20 +198,17 @@ export default function ContactPage() {
                   initial={{ opacity: 0, y: 18 }}
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
-                  transition={{
-                    duration: 0.5,
-                    delay: index * 0.08,
-                  }}
-                  className={`group px-5 py-7 sm:px-6 ${
-                    index !== 0
-                      ? "border-t border-gray-200 sm:border-l lg:border-t-0"
-                      : ""
-                  }`}
+                  transition={{ duration: 0.5, delay: index * 0.08 }}
+                  className={`group px-5 py-7 sm:px-6 ${index !== 0 ? "border-t border-gray-200 sm:border-l lg:border-t-0" : ""}`}
                 >
                   <div className="flex items-start gap-4">
+                    {/* Contact information icon. */}
+
                     <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg border border-blue-100 bg-blue-50 text-blue-600 transition duration-300 group-hover:bg-blue-600 group-hover:text-white">
                       <Icon size={18} />
                     </div>
+
+                    {/* Contact information text. */}
 
                     <div className="min-w-0">
                       <p className="text-xs font-semibold uppercase tracking-wider text-gray-400">
@@ -189,12 +233,16 @@ export default function ContactPage() {
 
       {/* =====================================================
           CONTACT FORM AREA
-      ====================================================== */}
+          Contains company information and the property inquiry form.
+      ===================================================== */}
 
       <section className="px-6 pb-16 sm:px-10 lg:px-16 lg:pb-20">
         <div className="mx-auto max-w-7xl">
           <div className="grid overflow-hidden border border-gray-200 lg:grid-cols-[0.72fr_1.28fr]">
-            {/* LEFT INFORMATION */}
+            {/* =================================================
+                LEFT INFORMATION
+                Benefits and company information shown beside the form.
+            ================================================= */}
 
             <motion.div
               initial={{ opacity: 0, x: -20 }}
@@ -219,9 +267,11 @@ export default function ContactPage() {
                 the right options based on your needs, location and budget.
               </p>
 
-              {/* Benefits */}
+              {/* Benefits offered by the real estate team. */}
 
               <div className="mt-9 space-y-5">
+                {/* Benefit 1 */}
+
                 <div className="flex items-start gap-3">
                   <FiCheckCircle
                     className="mt-0.5 shrink-0 text-blue-400"
@@ -239,6 +289,8 @@ export default function ContactPage() {
                   </div>
                 </div>
 
+                {/* Benefit 2 */}
+
                 <div className="flex items-start gap-3">
                   <FiCheckCircle
                     className="mt-0.5 shrink-0 text-blue-400"
@@ -255,6 +307,8 @@ export default function ContactPage() {
                     </p>
                   </div>
                 </div>
+
+                {/* Benefit 3 */}
 
                 <div className="flex items-start gap-3">
                   <FiCheckCircle
@@ -274,7 +328,7 @@ export default function ContactPage() {
                 </div>
               </div>
 
-              {/* Office */}
+              {/* Office address information. */}
 
               <div className="mt-12 border-t border-white/10 pt-7">
                 <div className="flex gap-3">
@@ -295,7 +349,10 @@ export default function ContactPage() {
               </div>
             </motion.div>
 
-            {/* FORM */}
+            {/* =================================================
+                FORM
+                Property inquiry form submitted through Web3Forms.
+            ================================================= */}
 
             <motion.div
               initial={{ opacity: 0, x: 20 }}
@@ -304,6 +361,8 @@ export default function ContactPage() {
               transition={{ duration: 0.65 }}
               className="bg-white p-7 sm:p-10 lg:p-12"
             >
+              {/* Form heading and description. */}
+
               <div className="mb-8">
                 <p className="text-xs font-semibold uppercase tracking-[0.2em] text-blue-600">
                   Property Inquiry
@@ -319,10 +378,14 @@ export default function ContactPage() {
                 </p>
               </div>
 
+              {/* Main property inquiry form. */}
+
               <form onSubmit={onSubmit} className="space-y-5">
                 {/* NAME + EMAIL */}
 
                 <div className="grid gap-5 sm:grid-cols-2">
+                  {/* Full name field. */}
+
                   <div>
                     <label className="mb-2 block text-xs font-semibold text-gray-700">
                       Full Name
@@ -336,6 +399,8 @@ export default function ContactPage() {
                       className="w-full border-b border-gray-300 bg-transparent px-0 py-3 text-sm text-gray-900 outline-none transition placeholder:text-gray-400 focus:border-blue-600"
                     />
                   </div>
+
+                  {/* Email address field. */}
 
                   <div>
                     <label className="mb-2 block text-xs font-semibold text-gray-700">
@@ -355,6 +420,8 @@ export default function ContactPage() {
                 {/* PHONE + INTEREST */}
 
                 <div className="grid gap-5 sm:grid-cols-2">
+                  {/* Phone number field. */}
+
                   <div>
                     <label className="mb-2 block text-xs font-semibold text-gray-700">
                       Phone Number
@@ -367,6 +434,8 @@ export default function ContactPage() {
                       className="w-full border-b border-gray-300 bg-transparent px-0 py-3 text-sm text-gray-900 outline-none transition placeholder:text-gray-400 focus:border-blue-600"
                     />
                   </div>
+
+                  {/* Inquiry type selection. */}
 
                   <div>
                     <label className="mb-2 block text-xs font-semibold text-gray-700">
@@ -403,6 +472,8 @@ export default function ContactPage() {
                 {/* PROPERTY TYPE + BUDGET */}
 
                 <div className="grid gap-5 sm:grid-cols-2">
+                  {/* Property type selection. */}
+
                   <div>
                     <label className="mb-2 block text-xs font-semibold text-gray-700">
                       Property Type
@@ -425,6 +496,8 @@ export default function ContactPage() {
                       <option value="Commercial">Commercial</option>
                     </select>
                   </div>
+
+                  {/* Budget range selection. */}
 
                   <div>
                     <label className="mb-2 block text-xs font-semibold text-gray-700">
@@ -489,7 +562,11 @@ export default function ContactPage() {
                     disabled={result === "Sending..."}
                     className="group inline-flex items-center gap-3 bg-blue-600 px-7 py-3.5 text-sm font-semibold text-white transition duration-300 hover:bg-blue-700 disabled:cursor-not-allowed disabled:opacity-70"
                   >
+                    {/* Changes button text while the form is being submitted. */}
+
                     <span>{result || "Send Property Inquiry"}</span>
+
+                    {/* Arrow is displayed only when the form is not being submitted. */}
 
                     {!result && (
                       <FiArrowRight
@@ -499,6 +576,8 @@ export default function ContactPage() {
                     )}
                   </motion.button>
                 </div>
+
+                {/* Privacy note displayed below the submit button. */}
 
                 <p className="text-xs leading-5 text-gray-400">
                   Your information is only used to respond to your property
@@ -512,11 +591,14 @@ export default function ContactPage() {
 
       {/* =====================================================
           OFFICE LOCATION
-      ====================================================== */}
+          Displays the company address and a visual map placeholder.
+      ===================================================== */}
 
       <section className="border-t border-gray-100 bg-[#fafafa] px-6 py-14 sm:px-10 lg:px-16 lg:py-16">
         <div className="mx-auto max-w-7xl">
           <div className="grid items-center gap-10 md:grid-cols-2">
+            {/* Office information and directions. */}
+
             <motion.div
               initial={{ opacity: 0, x: -20 }}
               whileInView={{ opacity: 1, x: 0 }}
@@ -536,6 +618,8 @@ export default function ContactPage() {
                 with one of our property specialists.
               </p>
 
+              {/* Office address. */}
+
               <div className="mt-6 flex items-start gap-3">
                 <FiMapPin className="mt-1 shrink-0 text-blue-600" size={19} />
 
@@ -552,6 +636,8 @@ export default function ContactPage() {
                 </div>
               </div>
 
+              {/* Directions button. */}
+
               <button
                 type="button"
                 className="group mt-7 inline-flex items-center gap-2 text-sm font-semibold text-gray-900 transition hover:text-blue-600"
@@ -564,7 +650,7 @@ export default function ContactPage() {
               </button>
             </motion.div>
 
-            {/* Minimal map placeholder */}
+            {/* Minimal map placeholder. */}
 
             <motion.div
               initial={{ opacity: 0, x: 20 }}
@@ -573,12 +659,19 @@ export default function ContactPage() {
               transition={{ duration: 0.6 }}
               className="relative flex min-h-[260px] items-center justify-center overflow-hidden border border-gray-200 bg-white"
             >
+              {/* Decorative map lines. */}
+
               <div className="absolute inset-0 opacity-40">
                 <div className="absolute left-[15%] top-[30%] h-px w-[70%] rotate-[12deg] bg-gray-300" />
+
                 <div className="absolute left-[5%] top-[55%] h-px w-[90%] rotate-[-8deg] bg-gray-300" />
+
                 <div className="absolute left-[35%] top-[5%] h-[90%] w-px rotate-[18deg] bg-gray-300" />
+
                 <div className="absolute left-[65%] top-[5%] h-[90%] w-px rotate-[-12deg] bg-gray-300" />
               </div>
+
+              {/* Location marker and address label. */}
 
               <div className="relative z-10 text-center">
                 <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-blue-600 text-white shadow-md">
@@ -598,7 +691,8 @@ export default function ContactPage() {
 
       {/* =====================================================
           FINAL CTA
-      ====================================================== */}
+          Encourages users to start a property conversation.
+      ===================================================== */}
 
       <section className="px-6 py-14 sm:px-10 lg:px-16 lg:py-20">
         <motion.div
@@ -621,14 +715,11 @@ export default function ContactPage() {
             that feels right for you.
           </p>
 
+          {/* Scrolls the page smoothly to the top when clicked. */}
+
           <button
             type="button"
-            onClick={() =>
-              window.scrollTo({
-                top: 0,
-                behavior: "smooth",
-              })
-            }
+            onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
             className="group mt-6 inline-flex items-center gap-2 text-sm font-semibold text-gray-900 transition hover:text-blue-600"
           >
             Start a conversation

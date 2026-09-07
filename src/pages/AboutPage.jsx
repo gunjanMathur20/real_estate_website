@@ -1,10 +1,19 @@
+
+
+// React library used to create the About page component.
 import React from "react";
+
+// Framer Motion used for scroll-based and hover animations.
 import { motion } from "framer-motion";
+
+// Icons used throughout the About page for the value cards and CTA.
 import { ArrowUpRight, Building2, MapPin, ShieldCheck } from "lucide-react";
 
+// Project images and other static assets.
 import { assets } from "../assets/assets";
 
 export default function AboutPage() {
+  // Statistics displayed in the experience and achievements section.
   const stats = [
     {
       number: "10+",
@@ -24,6 +33,7 @@ export default function AboutPage() {
     },
   ];
 
+  // Core values displayed in the "What defines us" section.
   const values = [
     {
       icon: Building2,
@@ -46,6 +56,7 @@ export default function AboutPage() {
     <section className="relative overflow-hidden bg-[#F7F9FC] px-6 py-24 sm:px-10 lg:px-16 lg:py-32">
       {/* =====================================================
           BACKGROUND DETAILS
+          Decorative background elements used to add depth.
       ===================================================== */}
 
       <div className="pointer-events-none absolute right-0 top-0 h-[500px] w-[500px] rounded-full bg-blue-100/30 blur-3xl" />
@@ -55,6 +66,7 @@ export default function AboutPage() {
       <div className="relative mx-auto max-w-7xl">
         {/* =====================================================
             INTRO
+            Main introduction and heading for the About section.
         ===================================================== */}
 
         <motion.div
@@ -93,21 +105,20 @@ export default function AboutPage() {
 
         {/* =====================================================
             STORY AREA
+            Combines the image composition with the company story.
         ===================================================== */}
 
         <div className="mt-20 grid items-center gap-16 lg:grid-cols-[1.05fr_0.95fr] lg:gap-24">
           {/* =================================================
               IMAGE COMPOSITION
+              Multiple property images arranged as a layered layout.
           ================================================= */}
 
           <motion.div
             initial={{ opacity: 0, x: -45 }}
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true, amount: 0.2 }}
-            transition={{
-              duration: 0.8,
-              ease: "easeOut",
-            }}
+            transition={{ duration: 0.8, ease: "easeOut" }}
             className="relative min-h-[560px]"
           >
             {/* Large image */}
@@ -142,10 +153,7 @@ export default function AboutPage() {
               initial={{ opacity: 0, y: 30 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              transition={{
-                delay: 0.25,
-                duration: 0.7,
-              }}
+              transition={{ delay: 0.25, duration: 0.7 }}
               whileHover={{ y: -6 }}
               className="absolute bottom-0 right-0 z-20 w-[47%] overflow-hidden border-[7px] border-[#F7F9FC] shadow-[0_20px_50px_rgba(15,23,42,0.18)]"
             >
@@ -162,10 +170,7 @@ export default function AboutPage() {
               initial={{ opacity: 0, scale: 0.85 }}
               whileInView={{ opacity: 1, scale: 1 }}
               viewport={{ once: true }}
-              transition={{
-                delay: 0.4,
-                duration: 0.6,
-              }}
+              transition={{ delay: 0.4, duration: 0.6 }}
               className="absolute right-[3%] top-[7%] z-30 w-[29%] overflow-hidden border-[6px] border-[#F7F9FC] shadow-[0_15px_40px_rgba(15,23,42,0.18)]"
             >
               <img
@@ -181,10 +186,7 @@ export default function AboutPage() {
               initial={{ opacity: 0, scale: 0.7 }}
               whileInView={{ opacity: 1, scale: 1 }}
               viewport={{ once: true }}
-              transition={{
-                delay: 0.5,
-                duration: 0.6,
-              }}
+              transition={{ delay: 0.5, duration: 0.6 }}
               className="absolute bottom-[175px] left-[55%] z-40 flex h-[94px] w-[94px] -translate-x-1/2 flex-col items-center justify-center rounded-full bg-blue-600 text-white shadow-[0_12px_35px_rgba(37,99,235,0.3)]"
             >
               <span className="text-[25px] font-semibold tracking-tight">
@@ -196,23 +198,21 @@ export default function AboutPage() {
               </span>
             </motion.div>
 
-            {/* Decorative line */}
+            {/* Decorative line behind the image composition. */}
 
             <div className="absolute bottom-8 left-8 h-[405px] w-[72%] border border-blue-200/70" />
           </motion.div>
 
           {/* =================================================
               STORY CONTENT
+              Explains the company's philosophy and approach.
           ================================================= */}
 
           <motion.div
             initial={{ opacity: 0, x: 45 }}
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true, amount: 0.2 }}
-            transition={{
-              duration: 0.8,
-              ease: "easeOut",
-            }}
+            transition={{ duration: 0.8, ease: "easeOut" }}
           >
             <p className="text-[11px] font-semibold uppercase tracking-[0.28em] text-blue-600">
               Our philosophy
@@ -242,6 +242,7 @@ export default function AboutPage() {
 
             {/* =================================================
                 HIGHLIGHTS
+                Key principles followed by UrbanNest.
             ================================================= */}
 
             <div className="mt-8 grid gap-3 sm:grid-cols-3 lg:grid-cols-1">
@@ -255,10 +256,7 @@ export default function AboutPage() {
                   initial={{ opacity: 0, x: 15 }}
                   whileInView={{ opacity: 1, x: 0 }}
                   viewport={{ once: true }}
-                  transition={{
-                    delay: index * 0.1,
-                    duration: 0.4,
-                  }}
+                  transition={{ delay: index * 0.1, duration: 0.4 }}
                   className="flex items-center gap-3"
                 >
                   <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-blue-50 text-blue-600">
@@ -291,6 +289,7 @@ export default function AboutPage() {
 
         {/* =====================================================
             STATS
+            Displays key company achievements.
         ===================================================== */}
 
         <motion.div
@@ -306,9 +305,7 @@ export default function AboutPage() {
                 key={stat.label}
                 whileHover={{ y: -3 }}
                 transition={{ duration: 0.25 }}
-                className={`px-5 py-9 sm:px-8 ${
-                  index !== 0 ? "border-l border-[#E5EAF0]" : ""
-                }`}
+                className={`px-5 py-9 sm:px-8 ${index !== 0 ? "border-l border-[#E5EAF0]" : ""}`}
               >
                 <p className="text-4xl font-semibold tracking-[-0.03em] text-[#17212B] sm:text-5xl">
                   {stat.number}
@@ -326,6 +323,7 @@ export default function AboutPage() {
 
         {/* =====================================================
             VALUES
+            Highlights the principles that define UrbanNest.
         ===================================================== */}
 
         <motion.div
@@ -359,29 +357,17 @@ export default function AboutPage() {
 
             <div className="grid gap-4 sm:grid-cols-3">
               {values.map((value, index) => {
+                // Extract the icon component from the current value object.
                 const Icon = value.icon;
 
                 return (
                   <motion.div
                     key={value.title}
-                    initial={{
-                      opacity: 0,
-                      y: 25,
-                    }}
-                    whileInView={{
-                      opacity: 1,
-                      y: 0,
-                    }}
-                    viewport={{
-                      once: true,
-                    }}
-                    transition={{
-                      delay: index * 0.12,
-                      duration: 0.5,
-                    }}
-                    whileHover={{
-                      y: -6,
-                    }}
+                    initial={{ opacity: 0, y: 25 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ delay: index * 0.12, duration: 0.5 }}
+                    whileHover={{ y: -6 }}
                     className="group border border-[#E5EAF0] bg-white p-6 transition duration-300 hover:border-blue-100 hover:shadow-[0_18px_45px_rgba(15,23,42,0.08)]"
                   >
                     <div className="flex h-11 w-11 items-center justify-center bg-blue-50 text-blue-600 transition duration-300 group-hover:bg-blue-600 group-hover:text-white">
